@@ -8,6 +8,9 @@ vim.g.markdown_fenced_languages = {
 
 vim.o.winborder = "rounded"
 
+vim.o.foldenable = true
+vim.o.foldmethod = "expr"
+
 vim.lsp.enable({ "lua_ls" })
 vim.lsp.config("lua_ls", {
 	settings = {

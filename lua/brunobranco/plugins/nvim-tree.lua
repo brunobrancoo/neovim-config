@@ -59,7 +59,7 @@ return {
 		keymap.set("n", "<leader>ec", "<cmd>NvimTreeCollapse<CR>", { desc = "Collapse file explorer" }) -- collapse file explorer
 		keymap.set("n", "<leader>er", "<cmd>NvimTreeRefresh<CR>", { desc = "Refresh file explorer" }) -- refresh file explorer
 		keymap.set("n", "<leader>?", api.tree.toggle_help, {})
-		keymap.set("n", "<leader>++", "<cmd>vertical resize +20<CR>", { desc = "Refresh file explorer" }) -- refresh file explorer
-		keymap.set("n", "<leader>--", "<cmd>vertical resize -20<CR>", { desc = "Refresh file explorer" }) -- refresh file explorer
+		keymap.set("n", "<leader>++", "<cmd>vertical resize +20<CR>", { desc = "Zoom in" }) -- refresh file explorer
+		keymap.set("n", "<leader>--", "<cmd>vertical resize -20<CR>", { desc = "Zoom out" }) -- refresh file explorer
 	end,
 }

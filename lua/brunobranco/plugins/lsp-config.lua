@@ -29,7 +29,16 @@ return {
 		"neovim/nvim-lspconfig",
 		config = function()
 			-- The nvim-cmp almost supports LSP's capabilities so You should advertise it to LSP servers..
+			--
+			--
+			--
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+			capabilities.textDocument.foldingRange = {
+				dynamicRegistration = false,
+				lineFoldingOnly = true,
+			}
+
 			local lspconfig = require("lspconfig")
 			-- List of LSPs to set up
 			local servers = {
