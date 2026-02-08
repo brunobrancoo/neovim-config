@@ -51,3 +51,7 @@ end, { noremap = true, silent = true })
 
 --oil thing
 vim.keymap.set("n", "-", "<CMD>Oil --float<CR>", { desc = "Open parent directory" })
+
+--#for resizing windows
+vim.keymap.set("n", "<leader>++", "<cmd>vertical resize +20<CR>", { desc = "Zoom in" }) -- refresh file explorer
+vim.keymap.set("n", "<leader>--", "<cmd>vertical resize -20<CR>", { desc = "Zoom out" }) -- refresh file explorer

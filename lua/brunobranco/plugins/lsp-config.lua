@@ -43,7 +43,8 @@ return {
 			-- List of LSPs to set up
 			local servers = {
 				-- "lua_ls",
-				-- "gopls",
+				"gopls",
+				"golangci_lint_ls",
 				"tailwindcss",
 				-- "pyright",
 				"html",
@@ -73,63 +74,36 @@ return {
 
 			lspconfig.ts_ls.setup({
 				capabilities = capabilities,
-				root_dir = lspconfig.util.root_pattern("package.json"),
+				root_dir = lspconfig.util.root_pattern("package.json", "tsconfig.json", ".git"),
 				single_file_support = true,
 				handlers = {
 					["textDocument/publishDiagnostics"] = function(_, result, ctx, config)
-						if result.diagnostics == nil then
+						if not result.diagnostics then
 							return
 						end
 
-						-- ignore some tsserver diagnostics
 						local idx = 1
 						while idx <= #result.diagnostics do
 							local entry = result.diagnostics[idx]
-
 							local formatter = require("format-ts-errors")[entry.code]
 							entry.message = formatter and formatter(entry.message) or entry.message
 
-							-- codes: https://github.com/microsoft/TypeScript/blob/main/src/compiler/diagnosticMessages.json
 							if entry.code == 80001 then
-								-- { message = "File is a CommonJS module; it may be converted to an ES module.", }
 								table.remove(result.diagnostics, idx)
 							else
 								idx = idx + 1
 							end
 						end
 
-						vim.lsp.diagnostic.on_publish_diagnostics(_, result, ctx, config)
+						vim.lsp.diagnostic.on_publish_diagnostics(nil, result, ctx, config)
 					end,
 				},
 			})
 
 			lspconfig.denols.setup({
 				capabilities = capabilities,
-				root_dir = lspconfig.util.root_pattern("deno.json", "import_map.json"),
+				root_dir = lspconfig.util.root_pattern("deno.json", "deno.jsonc"),
 				single_file_support = false,
-				init_options = {
-					lint = true,
-					unstable = true,
-				},
-				filetypes = { "javascript", "typescript", "typescriptreact", "javascriptreact" },
-				settings = {
-					deno = {
-						enable = true,
-						lint = true,
-						unstable = true,
-						suggest = {
-							imports = {
-								hosts = {
-									["https://deno.land"] = true,
-								},
-							},
-						},
-					},
-				},
-				cmd = { "deno", "lsp" },
-				cmd_env = {
-					NO_COLOR = true,
-				},
 			})
 
 			vim.g.markdown_fenced_languages = {

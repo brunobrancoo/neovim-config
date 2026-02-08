@@ -8,12 +8,9 @@ return {
 		local harpoon = require("harpoon")
 		harpoon.setup()
 
-		--open terminal
-		-- vim.keymap.set("n", "<leader>ot", "<C-w><C-v>:terminal<CR>")
-
 		vim.keymap.set("n", "<leader>ot", function()
 			vim.cmd("vsplit | terminal")
-			harpoon:list():replace_at(9) --for list id 9
+			harpoon:list():replace_at(10) --for list id 9
 			vim.cmd("startinsert")
 		end)
 
@@ -52,7 +49,7 @@ return {
 			harpoon:list():add()
 		end)
 
-		vim.keymap.set("n", "<leader>c", function()
+		vim.keymap.set("n", "<leader>ch", function()
 			harpoon:list():clear()
 		end)
 
@@ -91,10 +88,14 @@ return {
 				border = "rounded",
 			})
 
-			-- spawn a terminal inside this buffer
-			vim.fn.termopen(vim.o.shell, {
-				on_exit = function(_, _, _)
-					-- optionally close the floating window on terminal exit
+			-- spawn terminal in the buffer
+			vim.cmd("terminal " .. vim.o.shell)
+
+			-- set up on_exit callback via autocmd
+			vim.api.nvim_create_autocmd("TermClose", {
+				buffer = buf,
+				once = true,
+				callback = function()
 					if vim.api.nvim_win_is_valid(win) then
 						vim.api.nvim_win_close(win, true)
 					end
@@ -152,8 +153,13 @@ return {
 			if not item or not item.value then
 				vim.notify("No terminal registered in slot 10, created a new one", vim.log.levels.WARN)
 
+				--open terminal
+				-- vim.keymap.set("n", "<leader>ot", "<C-w><C-v>:terminal<CR>")
 				-- create an empty buffer
+				vim.cmd("vsplit")
+				vim.cmd("vertical resize 80")
 				vim.cmd("terminal")
+
 				harpoon:list():replace_at(10)
 				vim.cmd("startinsert")
 
@@ -163,11 +169,15 @@ return {
 			-- Try to find the buffer by name
 			local bufnr = vim.fn.bufnr(item.value)
 			if bufnr == -1 then
+				vim.cmd("vsplit")
+				vim.cmd("vertical resize 80")
 				vim.cmd("terminal")
 				harpoon:list():replace_at(10)
 				vim.cmd("startinsert")
 			--buffer exists
 			else
+				vim.cmd("vsplit")
+				vim.cmd("vertical resize 80")
 				harpoon:list():select(10)
 			end
 		end)
