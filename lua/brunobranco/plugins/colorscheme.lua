@@ -3,10 +3,11 @@ return {
 	lazy = false,
 	priority = 1000,
 	config = function()
-		require("everforest").setup({
-			transparent_background_level = 1,
+		local config = {
+			transparent_background_level = 0,
 			italics = true,
-		})
+		}
+		require("everforest").setup(config)
 		-- Optionally configure and load the colorscheme
 		-- directly inside the plugin declaration.
 		vim.cmd.colorscheme("everforest")
