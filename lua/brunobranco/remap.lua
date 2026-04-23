@@ -24,6 +24,12 @@ vim.keymap.set("n", "<leader>lis", ":LetItSnow<CR>")
 vim.keymap.set("n", "<leader>sts", ":EndHygge<CR>")
 vim.keymap.set("n", "<C-b>", ":b#<CR>")
 
+-- Built in undotree
+vim.keymap.set("n", "<leader>u", function()
+	vim.cmd.packadd("nvim.undotree")
+	require("undotree").open()
+end, { desc = "Toggle Builtin Undotree" })
+
 --open error window lsp
 vim.keymap.set("n", "<leader>lw", ":LspDiagnosticsWarning<CR>")
 vim.keymap.set("n", "<leader>li", ":LspDiagnosticsInformation<CR>")
