@@ -4,7 +4,7 @@ return {
 	priority = 1000,
 	config = function()
 		require("everforest").setup({
-			transparent_background_level = 0,
+			transparent_background_level = 1,
 			italics = true,
 		})
 		-- Optionally configure and load the colorscheme
