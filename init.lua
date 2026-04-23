@@ -3,6 +3,17 @@ require("brunobranco.remap")
 
 require("brunobranco.lazy")
 
+require("vim._core.ui2").enable({
+	enable = true,
+	msg = {
+		target = "cmd",
+		pager = { height = 0.5 },
+		dialog = { height = 0.5 },
+		cmd = { height = 0.5 },
+		msg = { height = 0.5, timeout = 4500 },
+	},
+})
+
 vim.g.markdown_fenced_languages = {
 	"ts=typescript",
 }
