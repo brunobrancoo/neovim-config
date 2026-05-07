@@ -1,5 +1,6 @@
 require("brunobranco.settings")
 require("brunobranco.remap")
+-- require("brunobranco.nord-config")
 
 require("brunobranco.lazy")
 
@@ -13,6 +14,10 @@ require("vim._core.ui2").enable({
 		msg = { height = 0.5, timeout = 4500 },
 	},
 })
+
+--colorscheme:
+-- require("nord").set()
+vim.o.background = "dark"
 
 vim.g.markdown_fenced_languages = {
 	"ts=typescript",
@@ -79,11 +84,11 @@ vim.api.nvim_create_autocmd("DirChanged", {
 })
 
 -- This maintains my cwd as always the file I opened neovim, and let's me :cd if I want. Explicit behaviour.
-vim.api.nvim_create_autocmd("WinEnter", {
-	callback = function()
-		vim.cmd("lcd -") -- Clear window-local cwd
-	end,
-})
+-- vim.api.nvim_create_autocmd("WinEnter", {
+-- 	callback = function()
+-- 		vim.cmd("lcd -") -- Clear window-local cwd
+-- 	end,
+-- })
 
 --This maintains my cwd as always the root project, based on .git or .package.json files. Opinionated behaviour.
 -- vim.api.nvim_create_autocmd("VimEnter", {

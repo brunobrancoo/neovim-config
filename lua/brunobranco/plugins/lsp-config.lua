@@ -8,11 +8,20 @@ return {
 	},
 	{
 		"mason-org/mason-lspconfig.nvim",
-		version = "^1.0.0",
+		version = "^2.0.0",
 		config = function()
 			require("mason-lspconfig").setup({
-				auto_install = true,
-				ensure_installed = { "ts_ls", "lua_ls" },
+				ensure_installed = {
+					"ts_ls",
+					"lua_ls",
+					"eslint",
+					"gopls",
+					"golangci_lint_ls",
+					"tailwindcss",
+					"html",
+					"prismals",
+				},
+				automatic_enable = false,
 			})
 		end,
 	},
@@ -28,10 +37,6 @@ return {
 	{
 		"neovim/nvim-lspconfig",
 		config = function()
-			-- The nvim-cmp almost supports LSP's capabilities so You should advertise it to LSP servers..
-			--
-			--
-			--
 			local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 			capabilities.textDocument.foldingRange = {
@@ -39,42 +44,49 @@ return {
 				lineFoldingOnly = true,
 			}
 
-			local lspconfig = require("lspconfig")
-			-- List of LSPs to set up
-			local servers = {
-				-- "lua_ls",
-				"gopls",
-				"golangci_lint_ls",
-				"tailwindcss",
-				-- "pyright",
-				"html",
-				-- "tailwindcss",
-				-- "rust_analyzer",
-				"prismals",
-				-- "roslyn",
-			}
-
-			for _, server in ipairs(servers) do
-				lspconfig[server].setup({
-					capabilities = capabilities,
-				})
-			end
+			local root_pattern = vim.fs.root
 
 			----------
 
-			require("lspconfig").eslint.setup({
+			-- vim.lsp.config("eslint", {
+			-- 	capabilities = capabilities,
+			-- 	on_attach = function(_, bufnr)
+			-- 		vim.api.nvim_create_autocmd("BufWritePre", {
+			-- 			buffer = bufnr,
+			-- 			command = "EslintFixAll",
+			-- 		})
+			-- 	end,
+			-- })
+			vim.lsp.config("eslint", {
+				capabilities = capabilities,
 				on_attach = function(client, bufnr)
+					if client.name ~= "eslint" then
+						return
+					end
+
 					vim.api.nvim_create_autocmd("BufWritePre", {
 						buffer = bufnr,
-						command = "EslintFixAll",
+						callback = function()
+							vim.lsp.buf.code_action({
+								apply = true,
+								context = {
+									only = { "source.fixAll.eslint" },
+									diagnostics = {},
+								},
+							})
+						end,
 					})
 				end,
 			})
 			-- Set up LSPs with capabilities
-
-			lspconfig.ts_ls.setup({
+			vim.lsp.config("ts_ls", {
 				capabilities = capabilities,
-				root_dir = lspconfig.util.root_pattern("package.json", "tsconfig.json", ".git"),
+				root_dir = function(bufnr, on_dir)
+					local root = root_pattern(bufnr, { "package.json", "tsconfig.json", ".git" })
+					if root then
+						on_dir(root)
+					end
+				end,
 				single_file_support = true,
 				handlers = {
 					["textDocument/publishDiagnostics"] = function(_, result, ctx, config)
@@ -95,20 +107,44 @@ return {
 							end
 						end
 
-						vim.lsp.diagnostic.on_publish_diagnostics(nil, result, ctx, config)
+						vim.lsp.diagnostic.on_publish_diagnostics(nil, result, ctx)
 					end,
 				},
 			})
 
-			lspconfig.denols.setup({
+			vim.lsp.config("denols", {
 				capabilities = capabilities,
-				root_dir = lspconfig.util.root_pattern("deno.json", "deno.jsonc"),
+				root_dir = function(bufnr, on_dir)
+					local root = root_pattern(bufnr, { "deno.json", "deno.jsonc" })
+					if root then
+						on_dir(root)
+					end
+				end,
 				single_file_support = false,
+			})
+
+			-- List of LSPs to set up
+			vim.lsp.enable({
+				-- "lua_ls",
+				"gopls",
+				"golangci_lint_ls",
+				"tailwindcss",
+				"ts_ls",
+				"eslint",
+				-- "pyright",
+				"html",
+				-- "tailwindcss",
+				-- "rust_analyzer",
+				"prismals",
+				-- "roslyn",
 			})
 
 			vim.g.markdown_fenced_languages = {
 				"ts=typescript",
 			}
+
+			vim.bo.smartindent = true
+
 			vim.keymap.set("n", "K", vim.lsp.buf.hover, {})
 			vim.keymap.set("n", "gd", vim.lsp.buf.definition, {})
 			vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, {})

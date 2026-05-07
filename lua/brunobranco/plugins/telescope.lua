@@ -1,7 +1,7 @@
 return {
 	{
 		"nvim-telescope/telescope.nvim",
-		branch = "0.1.x",
+		branch = "master",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
@@ -54,7 +54,12 @@ return {
 				{ desc = "[W]orkspace [S]ymbols" }
 			)
 			keymap.set("n", "ds", require("telescope.builtin").lsp_document_symbols, { desc = "[D]ocument [S]ymbol" })
-			keymap.set("n", "gr", require("telescope.builtin").lsp_references, { desc = "[G]o to [R]eferences" })
+			keymap.set(
+				"n",
+				"<leader>fe",
+				require("telescope.builtin").lsp_references,
+				{ desc = "[G]o to [R]eferences" }
+			)
 			keymap.set(
 				"n",
 				"<leader>gd",

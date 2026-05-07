@@ -1,13 +1,20 @@
+-- return {
+-- 	"brunobrancoo/nord.nvim",
+-- 	lazy = false,
+-- 	priority = 1000,
+-- }
 return {
 	"neanias/everforest-nvim",
 	lazy = false,
 	priority = 1000,
 	config = function()
 		local config = {
-			transparent_background_level = 0,
+			background = "low",
+			transparent_background_level = 1,
 			italics = true,
 		}
 		require("everforest").setup(config)
+		vim.o.background = "dark"
 		-- Optionally configure and load the colorscheme
 		-- directly inside the plugin declaration.
 		vim.cmd.colorscheme("everforest")

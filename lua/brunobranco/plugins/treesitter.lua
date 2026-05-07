@@ -1,58 +1,69 @@
 return {
 	"nvim-treesitter/nvim-treesitter",
-	event = { "BufReadPre", "BufNewFile" },
+	branch = "main",
+	lazy = false,
 	build = ":TSUpdate",
 	dependencies = {
 		"windwp/nvim-ts-autotag",
 	},
 	config = function()
-		-- import nvim-treesitter plugin
-		local treesitter = require("nvim-treesitter.configs")
+		local parsers = {
+			"json",
+			"javascript",
+			"typescript",
+			"tsx",
+			"yaml",
+			"html",
+			"css",
+			"prisma",
+			"markdown",
+			"markdown_inline",
+			"graphql",
+			"bash",
+			"lua",
+			"vim",
+			"dockerfile",
+			"gitignore",
+			"query",
+			"vimdoc",
+			"c",
+		}
 
-		-- configure treesitter
-		treesitter.setup({ -- enable syntax highlighting
-			highlight = {
-				enable = true,
-			},
-			-- enable indentation
-			indent = { enable = true },
-			-- enable autotagging (w/ nvim-ts-autotag plugin)
-			autotag = {
-				enable = true,
-			},
-			-- ensure these language parsers are installed
-			auto_install = true,
-			ensure_installed = {
-				"json",
+		require("nvim-treesitter").setup()
+
+		require("nvim-treesitter").install(parsers)
+
+		vim.api.nvim_create_autocmd("FileType", {
+			pattern = {
 				"javascript",
+				"javascriptreact",
 				"typescript",
-				"tsx",
-				"yaml",
+				"typescriptreact",
+				"json",
 				"html",
 				"css",
-				"prisma",
-				"markdown",
-				"markdown_inline",
-				"graphql",
-				"bash",
-				"lua",
-				"vim",
-				"dockerfile",
-				"gitignore",
-				"query",
-				"vimdoc",
-				"c",
 				"lua",
 			},
-			incremental_selection = {
-				enable = true,
-				keymaps = {
-					init_selection = "<C-space>",
-					node_incremental = "<C-space>",
-					scope_incremental = false,
-					node_decremental = "<bs>",
-				},
-			},
+			callback = function(args)
+				local filetype = vim.bo[args.buf].filetype
+				local lang = vim.treesitter.language.get_lang(filetype)
+
+				if not lang then
+					return
+				end
+
+				local ok = pcall(vim.treesitter.start, args.buf, lang)
+
+				if not ok then
+					return
+				end
+
+				vim.bo[args.buf].indentexpr = ""
+				vim.bo[args.buf].indentkeys = ""
+				vim.bo[args.buf].autoindent = true
+				vim.bo[args.buf].smartindent = true
+				vim.bo[args.buf].cindent = false
+			end,
 		})
 	end,
 }

@@ -10,13 +10,16 @@ return {
 
 		vim.opt.termguicolors = true
 
-		local HEIGHT_RATIO = 0.8 -- You can change this
-		local WIDTH_RATIO = 0.7 -- You can change this too
+		-- local HEIGHT_RATIO = 0.8 -- You can change this
+		-- local WIDTH_RATIO = 0.7 -- You can change this too
 
-		nvimtree.setup({
+		local config = {
 			sync_root_with_cwd = false,
 			respect_buf_cwd = false,
 			update_cwd = false,
+			hijack_directories = {
+				enable = true,
+			},
 			view = {
 				width = 35,
 				relativenumber = true,
@@ -73,6 +76,7 @@ return {
 					window_picker = {
 						enable = true,
 					},
+					quit_on_open = true,
 				},
 			},
 
@@ -82,7 +86,9 @@ return {
 			git = {
 				ignore = false,
 			},
-		})
+		}
+
+		nvimtree.setup(config)
 
 		-- set keymaps
 		local keymap = vim.keymap -- for conciseness
