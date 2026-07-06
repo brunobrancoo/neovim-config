@@ -47,12 +47,14 @@ return {
 			-- set keymaps
 			local keymap = vim.keymap -- for conciseness
 
+			vim.keymap.set("n", "<leader>gs", ":Telescope git_status<CR>", {})
 			keymap.set(
 				"n",
 				"<leader>ws",
 				require("telescope.builtin").lsp_dynamic_workspace_symbols,
 				{ desc = "[W]orkspace [S]ymbols" }
 			)
+			keymap.set("n", "<leader>tq", require("telescope.builtin").quickfix, { desc = "[W]orkspace [S]ymbols" })
 			keymap.set("n", "ds", require("telescope.builtin").lsp_document_symbols, { desc = "[D]ocument [S]ymbol" })
 			keymap.set(
 				"n",

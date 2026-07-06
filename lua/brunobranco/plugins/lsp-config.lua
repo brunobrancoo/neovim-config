@@ -94,19 +94,6 @@ return {
 							return
 						end
 
-						local idx = 1
-						while idx <= #result.diagnostics do
-							local entry = result.diagnostics[idx]
-							local formatter = require("format-ts-errors")[entry.code]
-							entry.message = formatter and formatter(entry.message) or entry.message
-
-							if entry.code == 80001 then
-								table.remove(result.diagnostics, idx)
-							else
-								idx = idx + 1
-							end
-						end
-
 						vim.lsp.diagnostic.on_publish_diagnostics(nil, result, ctx)
 					end,
 				},
@@ -126,6 +113,7 @@ return {
 			-- List of LSPs to set up
 			vim.lsp.enable({
 				-- "lua_ls",
+				"biome",
 				"gopls",
 				"golangci_lint_ls",
 				"tailwindcss",
@@ -139,9 +127,9 @@ return {
 				-- "roslyn",
 			})
 
-			vim.g.markdown_fenced_languages = {
-				"ts=typescript",
-			}
+			-- vim.g.markdown_fenced_languages = {
+			-- 	"ts=typescript",
+			-- }
 
 			vim.bo.smartindent = true
 

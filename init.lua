@@ -57,22 +57,22 @@ vim.keymap.set("n", "<leader>oe", function()
 	end
 end, {})
 
-vim.api.nvim_create_augroup("ForceNoHlSearch", { clear = true })
-vim.api.nvim_create_autocmd({ "BufWinEnter", "BufEnter", "WinEnter" }, {
-	group = "ForceNoHlSearch",
-	desc = "Always clear search highlight on open/switch",
-	callback = function()
-		vim.cmd("silent! nohlsearch")
-		vim.opt.hlsearch = false
-	end,
-}) -- Optional: also clear on leaving insert so accidental searches don't stick
-vim.api.nvim_create_autocmd("InsertLeave", {
-	group = "ForceNoHlSearch",
-	callback = function()
-		vim.cmd("silent! nohlsearch")
-		vim.opt.hlsearch = false
-	end,
-})
+-- vim.api.nvim_create_augroup("ForceNoHlSearch", { clear = true })
+-- vim.api.nvim_create_autocmd({ "BufWinEnter", "BufEnter", "WinEnter" }, {
+-- 	group = "ForceNoHlSearch",
+-- 	desc = "Always clear search highlight on open/switch",
+-- 	callback = function()
+-- 		vim.cmd("silent! nohlsearch")
+-- 		vim.opt.hlsearch = false
+-- 	end,
+-- }) -- Optional: also clear on leaving insert so accidental searches don't stick
+-- vim.api.nvim_create_autocmd("InsertLeave", {
+-- 	group = "ForceNoHlSearch",
+-- 	callback = function()
+-- 		vim.cmd("silent! nohlsearch")
+-- 		vim.opt.hlsearch = false
+-- 	end,
+-- })
 
 vim.opt.autochdir = false
 

@@ -1,6 +1,9 @@
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv")
 
+vim.keymap.set("n", "gh", "_", { noremap = true, silent = true })
+vim.keymap.set("n", "gl", "$", { noremap = true, silent = true })
+
 --keeping cursor on the middle while jumpping
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
@@ -61,3 +64,16 @@ vim.keymap.set("n", "-", "<CMD>Oil --float<CR>", { desc = "Open parent directory
 --#for resizing windows
 vim.keymap.set("n", "<leader>++", "<cmd>vertical resize +20<CR>", { desc = "Zoom in" }) -- refresh file explorer
 vim.keymap.set("n", "<leader>--", "<cmd>vertical resize -20<CR>", { desc = "Zoom out" }) -- refresh file explorer
+
+--#toggle hlsearch
+vim.keymap.set("n", "<C-h>", function()
+	local hlsearch = vim.opt.hlsearch:get()
+	local msg = "hlsearch " .. tostring(not hlsearch)
+	vim.cmd("echo '" .. msg .. "'")
+	vim.opt.hlsearch = not hlsearch
+end, { desc = "Toggle hlsearch" })
+
+--restart null_ls
+vim.api.nvim_create_user_command("Reslsp", function()
+	vim.cmd("lsp restart null-ls")
+end, { desc = "Restart null_ls" })
