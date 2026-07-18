@@ -73,7 +73,7 @@ vim.keymap.set("n", "<C-h>", function()
 	vim.opt.hlsearch = not hlsearch
 end, { desc = "Toggle hlsearch" })
 
---restart null_ls
-vim.api.nvim_create_user_command("Reslsp", function()
-	vim.cmd("lsp restart null-ls")
-end, { desc = "Restart null_ls" })
+vim.keymap.set("n", "cp", function()
+	vim.cmd("let @+ = expand('%')")
+	vim.cmd("echo 'cwd copied to clipboard'")
+end, { desc = "Copy current working directory" })

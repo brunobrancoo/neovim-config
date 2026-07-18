@@ -11,10 +11,11 @@ return {
 	config = function()
 		require("ufo").setup({})
 
-		-- Persist folds only for normal files
+		-- Persist folds only for normal files (skip diff mode: mkview would
+		-- capture the temporary foldmethod=diff and loadview would replay it forever)
 		vim.api.nvim_create_autocmd("BufWinLeave", {
 			callback = function()
-				if vim.bo.buftype == "" and vim.fn.expand("%") ~= "" then
+				if vim.bo.buftype == "" and vim.fn.expand("%") ~= "" and not vim.wo.diff then
 					pcall(vim.cmd, "mkview")
 				end
 			end,
