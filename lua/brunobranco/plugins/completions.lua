@@ -29,9 +29,9 @@ return {
 					end,
 				},
 				-- this disable auto complete
-				-- completion = {
-				-- 	-- autocomplete = false,
-				-- },
+				completion = {
+					autocomplete = false,
+				},
 				window = {
 					completion = cmp.config.window.bordered(),
 					documentation = cmp.config.window.bordered(),
