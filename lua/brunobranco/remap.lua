@@ -77,3 +77,27 @@ vim.keymap.set("n", "cp", function()
 	vim.cmd("let @+ = expand('%')")
 	vim.cmd("echo 'cwd copied to clipboard'")
 end, { desc = "Copy current working directory" })
+
+--#delete focused entry from quickfix
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "qf",
+	callback = function(event)
+		if vim.fn.getwininfo(vim.api.nvim_get_current_win())[1].loclist == 1 then
+			return
+		end
+		vim.keymap.set("n", "<leader>d", function()
+			local items = vim.fn.getqflist()
+			local index = vim.fn.line(".")
+			if #items == 0 then
+				return
+			end
+			table.remove(items, index)
+			vim.fn.setqflist({}, "r", { items = items })
+			vim.api.nvim_win_set_cursor(0, { math.max(1, math.min(index, #items)), 0 })
+		end, { buffer = event.buf, desc = "Delete quickfix entry" })
+	end,
+})
+
+-- navigate quickfix list files
+vim.keymap.set("n", "<leader>nf", "<cmd>cnext<CR>", { desc = "Zoom out" }) -- refresh file explorer
+vim.keymap.set("n", "<leader>pf", "<cmd>cprev<CR>", { desc = "Zoom out" }) -- refresh file explorer
